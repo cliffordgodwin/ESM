@@ -39,13 +39,14 @@ def FLEXtopo( ParPlateau, ParHillslope, ParWetland, ParCatchment,forcing, landsc
 		Fluxes_wetland, States_wetland, Ss=wetland( t, ParWetland, forcing, Fluxes_wetland, States_wetland, Ss, landscapes[2] )
 
 		# Slow Reservoir
-		Ss[t]=Ss[t]+ ... * landscapes[0] + ... 
+		Ss[t]=Ss[t]+ Fluxes_plateau[t,3] * landscapes[0] + Fluxes_hillslope[t,3] * landscapes[1] 
 		Qsdt= dt*Ks*Ss[t] 
+		print(Qsdt)
 		Ss[t]=Ss[t]-min(Qsdt,Ss[t])
 		if t<tmax-1:
 			Ss[t+1]=Ss[t]
 
-		Qtotdt[t]=Qsdt + ... * landscapes[0] + ... +  ... 
+		Qtotdt[t]=Qsdt + Fluxes_plateau[t,2] * landscapes[0] + Fluxes_hillslope[t,2] * landscapes[1] +  Fluxes_wetland[t,2] * landscapes[2] 
 
 
 

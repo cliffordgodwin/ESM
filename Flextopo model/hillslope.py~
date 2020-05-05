@@ -31,11 +31,22 @@ def hillslope(  timestep, Par, forcing, Fluxes, States ):
 
 	Pdt=Prec[t]*dt
 	Epdt=Etp[t]*dt
-
 	# Interception Reservoir
-	...
+	if Pdt>0:
+		Si[t]=Si[t]+Pdt
+		Pedt=max(0,Si[t]-Imax)
+		Si[t]=Si[t]-Pedt
+		Eidt[t]=0
+	else:
+	# Evaporation only when there is no rainfall
+		Pedt=0
+		Eidt[t]=min(Epdt,Si[t])
+		Si[t]=Si[t]-Eidt[t]
 
-	
+	if t<tmax-1:
+		Si[t+1]=Si[t]
+
+
 	# Unsaturated Reservoir
 	if Pedt>0:
 		rho=(Su[t]/Sumax)**beta            
@@ -45,14 +56,23 @@ def hillslope(  timestep, Par, forcing, Fluxes, States ):
 		Qufdt=0
 
 	# Transpiration
-	...
+	Epdt=max(0,Epdt-Eidt[t])
+	Eadt[t]=Epdt*(Su[t]/(Sumax*Ce))
+	Eadt[t]=min(Eadt[t],Su[t])
+	Su[t]=Su[t]-Eadt[t]
+	if t<tmax-1:
+		Su[t+1]=Su[t]
 
 	# Preferential Percolation
-	Qusdt= D * ...
+	Qusdt= D * Qufdt
 
 	# Fast Reservoir
-	Sf[t]=Sf[t]+(1-D)*...
-	Qfdt[t]= ...  
+	Sf[t]=Sf[t]+(1-D)*Qufdt
+	Qfdt[t]= dt*Kf*Sf[t]
+	print(Qfdt[t])
+	Sf[t]=Sf[t]-min(Qfdt[t],Sf[t])
+	if t<tmax-1:
+		Sf[t+1]=Sf[t]    
 
 
 	#save output

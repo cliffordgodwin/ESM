@@ -9,7 +9,7 @@ ParMinn = np.array([0,   0.2,  40,    .5,   .001,   0,     .01,  .0001])
 ParMaxn = np.array([8,    1,  800,   4,    .3,     10,    .1,   .01])
 Sin= np.array([0,  100,  0,  5  ])
 
-forcing= forcing[:,3:6]
+forcing= forcing[:,3:7]
 
 
 # GLUE

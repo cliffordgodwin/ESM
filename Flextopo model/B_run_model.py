@@ -16,7 +16,7 @@ ParWetland   = np.array([9.94, 0.50, 53.25, 0.70, 0.65, 0.45])
 ParCatchment = np.array([0.0281, 2.21])
 
 #landscape percentages
-landscape_per=np.array([... ... ...])
+landscape_per=np.array([0.4463, 0.4432, 0.1106])
 
 
 Qm = FLEXtopo(ParPlateau, ParHillslope, ParWetland, ParCatchment, forcing[:,3:6], landscape_per)
