@@ -42,6 +42,10 @@ cmap = mpl.colors.ListedColormap(['white', 'red', 'green', 'blue'])
 bounds=[0,1,2,3,4]
 norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
 
+print(hillslope_per)
+print(wetland_per)
+print(plateau_per)
+
 plt.figure(3)
 plt.imshow(landscapes, cmap=cmap, norm=norm)
 plt.colorbar()
