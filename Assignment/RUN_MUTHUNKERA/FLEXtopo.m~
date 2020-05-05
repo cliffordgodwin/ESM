@@ -1,0 +1,81 @@
+function [Qm] = FLEXtopo( ParPlateau, ParHillslope, ParWetland, ParCatchment, forcing, landscapes )
+%HBVpareto Calculates values of 3 objective functions for HBV model
+
+
+%parameters and constants
+Ks=ParCatchment(1);
+Tlag=ParCatchment(2);
+tmax=length(forcing(:,1));
+dt=1;
+
+
+%initialize states
+States_plateau.Si = zeros(tmax,1);
+States_plateau.Su = zeros(tmax,1);
+States_plateau.Sf = zeros(tmax,1);
+
+States_hillslope.Si = zeros(tmax,1);
+States_hillslope.Su = zeros(tmax,1);
+States_hillslope.Sf = zeros(tmax,1);
+
+States_wetland.Si = zeros(tmax,1);
+States_wetland.Su = zeros(tmax,1);
+States_wetland.Sf = zeros(tmax,1);
+
+Ss=zeros(tmax,1); 
+
+%initialize fluxes
+Fluxes_plateau.Eidt = zeros(tmax,1);
+Fluxes_plateau.Eadt = zeros(tmax,1);
+Fluxes_plateau.Qusdt = zeros(tmax,1);
+Fluxes_plateau.Qfdt = zeros(tmax,1);
+
+Fluxes_hillslope.Eidt = zeros(tmax,1);
+Fluxes_hillslope.Eadt = zeros(tmax,1);
+Fluxes_hillslope.Qusdt = zeros(tmax,1);
+Fluxes_hillslope.Qfdt = zeros(tmax,1);
+
+Fluxes_wetland.Eidt = zeros(tmax,1);
+Fluxes_wetland.Eadt = zeros(tmax,1);
+Fluxes_wetland.Qfdt = zeros(tmax,1);
+
+Qsdt=zeros(tmax,1);
+Qtotdt=zeros(tmax,1);
+
+
+%%
+%loop over time
+for i=1:tmax
+    
+      
+    %plateau
+    [Fluxes_plateau, States_plateau] = plateau(i, ParPlateau, forcing, Fluxes_plateau, States_plateau);
+        
+    %hillslope
+    [Fluxes_hillslope, States_hillslope] = hillslope(i, ParHillslope, forcing, Fluxes_hillslope, States_hillslope);
+    
+    %wetland
+    [Fluxes_wetland, States_wetland] = wetland(i, ParWetland, forcing, Fluxes_wetland, States_wetland, Ss, landscapes(3));
+
+    
+    % Slow Reservoir
+    Ss(i)=Ss(i)+... *landscapes(1) + ...;
+    Qsdt(i)= dt*Ks*Ss(i);
+    Ss(i)=Ss(i)-min(Qsdt(i),Ss(i));
+    if i<tmax
+        Ss(i+1)=Ss(i);
+    end
+    
+    %total discharge
+    Qtotdt(i)=Qsdt(i)+ ... *landscapes(1) + ...;
+    
+
+ 
+end
+
+%apply lag functions
+Weigths=Weigfun(Tlag);
+Qm = conv(Qtotdt,Weigths);
+Qm=Qm(1:tmax);
+
+
