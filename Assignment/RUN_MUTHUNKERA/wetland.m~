@@ -1,0 +1,84 @@
+function [Fluxes, States, Ss] = wetland( timestep, Par, forcing, Fluxes, States, Ss, landscape_per )
+
+
+Imax=Par(1);
+Ce=Par(2);
+Sumax=Par(3);
+beta=Par(4);
+Cmax=Par(5);
+Kf=Par(6);
+
+
+
+Qo=forcing(:,1);
+Prec=forcing(:,2);
+Etp=forcing(:,3);
+
+
+Si=States.Si; 
+Su=States.Su; 
+Sf=States.Sf; 
+
+Eidt=Fluxes.Eidt;
+Eadt=Fluxes.Eadt;
+Qfdt=Fluxes.Qfdt;
+
+
+
+
+%%
+
+%current timestep
+ t=timestep;
+ dt=1;
+ tmax=length(Prec);
+    Pdt=Prec(t)*dt;
+    Epdt=Etp(t)*dt;
+
+    % Interception Reservoir
+    ...
+    
+    % Unsaturated Reservoir
+    ...
+        
+    % Transpiration
+    ...
+    
+    % Capillary rise
+    Qrdt=(1-Su(t)/Sumax)*...*...;
+          
+    %check if the groundwater has enough water (note the landscape
+    %percentage!!!)
+    Qrdt=min(Qrdt, ...
+    
+    %su cannot be more than sumax
+    if( (Su(t) + Qrdt) >Sumax)
+       
+        Qrdt = Sumax - Su(t);
+    end
+    
+    Su(t) = Su(t)+...;     
+    Ss(t) = Ss(t)-...*landscape_per;
+    
+    if t<tmax
+        Su(t+1)=Su(t);
+    end
+    
+    % Fast Reservoir
+    ...
+    
+    
+    
+    %save output
+    States.Si = Si;
+    States.Su = Su;
+    States.Sf = Sf; 
+    
+    Fluxes.Eidt=Eidt;
+    Fluxes.Eadt=Eadt;
+    Fluxes.Qfdt=Qfdt;
+      
+ 
+    
+    
+end

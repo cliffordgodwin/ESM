@@ -1,0 +1,72 @@
+function [Fluxes, States] = hillslope( timestep, Par, forcing, Fluxes, States )
+
+
+Imax=Par(1);
+Ce=Par(2);
+Sumax=Par(3);
+beta=Par(4);
+D=Par(5);
+Kf=Par(6);
+
+
+
+Qo=forcing(:,1);
+Prec=forcing(:,2);
+Etp=forcing(:,3);
+
+
+
+
+Si=States.Si; 
+Su=States.Su; 
+Sf=States.Sf; 
+
+Eidt=Fluxes.Eidt;
+Eadt=Fluxes.Eadt;
+Qfdt=Fluxes.Qfdt;
+Qusdt=Fluxes.Qusdt;
+
+
+
+
+%%
+
+%current timestep
+ t=timestep;
+ dt=1;
+ tmax=length(Prec);
+    Pdt=Prec(t)*dt;
+    Epdt=Etp(t)*dt;
+
+    % Interception Reservoir
+    ...
+    
+    % Unsaturated Reservoir
+    ...
+        
+    % Transpiration
+    ...
+   
+    % Preferential Percolation
+    Qusdt(t) = D * ...; 
+        
+    % Fast Reservoir
+    Sf(t)=Sf(t)+(1-D)*Qufdt;
+    Qfdt(t)= ...
+    
+    
+    
+    
+    %save output
+    States.Si = Si;
+    States.Su = Su;
+    States.Sf = Sf; 
+    
+    Fluxes.Eidt=Eidt;
+    Fluxes.Eadt=Eadt;
+    Fluxes.Qfdt=Qfdt;
+    Fluxes.Qusdt=Qusdt;
+
+
+    
+end
