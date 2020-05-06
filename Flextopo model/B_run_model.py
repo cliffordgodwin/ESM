@@ -22,6 +22,6 @@ landscape_per=np.array([0.4463, 0.4432, 0.1106])
 Qm = FLEXtopo(ParPlateau, ParHillslope, ParWetland, ParCatchment, forcing[:,3:6], landscape_per)
 Qo = forcing[:,3]
 
-plt.plot(range(0,len(Qo)),Qo)
-plt.plot(range(0,len(Qm)),Qm)
+plt.plot(range(0,len(Qo)),Qo,'r')
+plt.plot(range(0,len(Qm)),Qm,'b')
 plt.show()
