@@ -53,6 +53,4 @@ plt.colorbar()
 plt.show()
 
 
-asas
-
 
