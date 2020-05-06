@@ -18,7 +18,7 @@ plt.figure(2)
 hand[hand==-9999]=np.nan
 plt.imshow(hand, cmap='hsv')
 plt.colorbar()
-
+print("d")
 
 #make landscape classification
 hillslope = np.array(slope) >11
