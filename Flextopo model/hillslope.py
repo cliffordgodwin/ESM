@@ -15,7 +15,6 @@ def hillslope(  timestep, Par, forcing, Fluxes, States ):
 	Etp=forcing[:,2]
 
 
-	tmax=len(Prec)
 	Si=States[:,0]
 	Su=States[:,1]
 	Sf=States[:,2]
@@ -25,6 +24,8 @@ def hillslope(  timestep, Par, forcing, Fluxes, States ):
 	Qfdt=Fluxes[:,2]
 	Qusdt=Fluxes[:,3]
 
+	# Current timestep
+	tmax=len(Prec)
 	dt=1
 	t=timestep
 
@@ -49,7 +50,7 @@ def hillslope(  timestep, Par, forcing, Fluxes, States ):
 
 	# Unsaturated Reservoir
 	if Pedt>0:
-		rho=(Su[t]/Sumax)**beta            
+		rho=min((Su[t]/Sumax)**beta,1)            
 		Su[t]=Su[t]+(1-rho)*Pedt
 		Qufdt=rho*Pedt
 	else:
@@ -57,16 +58,25 @@ def hillslope(  timestep, Par, forcing, Fluxes, States ):
 
 	# Transpiration
 	Epdt=max(0,Epdt-Eidt[t])
-	Eadt[t]=Epdt*(Su[t]/(Sumax*Ce))
+	Eadt[t]=Epdt*min(Su[t]/(Sumax*Ce),1)
+	Ea_Ep = Eadt[t]/Epdt
+	if Ea_Ep>1 or isnan[Ea_Ep] or Ea_Ep<0:
+		Eadt[t]
+		Epdt
+		rho
+		Su[t]
+
 	Eadt[t]=min(Eadt[t],Su[t])
 	Su[t]=Su[t]-Eadt[t]
-	if t<tmax-1:
-		Su[t+1]=Su[t]
 
 	# Preferential Percolation
 	Qusdt= D * Qufdt
+	Su[t]=Su[t]-min(Qusdt[t], Su[t])
+	if t<tmax-1:
+		Su[t+1]=Su[t]
 
 	# Fast Reservoir
+	# ???Ask to the lecturer, doesnt use (1D) factor in matlab
 	Sf[t]=Sf[t]+(1-D)*Qufdt
 	Qfdt[t]= dt*Kf*Sf[t]
 	Sf[t]=Sf[t]-min(Qfdt[t],Sf[t])
