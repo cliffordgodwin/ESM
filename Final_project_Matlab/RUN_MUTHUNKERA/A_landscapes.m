@@ -55,6 +55,9 @@ hillslope_per = sum(hillslope)/sum(basin);
 wetland_per = sum(wetland)/sum(basin);
 plateau_per = sum(plateau)/sum(basin);
 
+disp(hillslope_per)
+disp(wetland_per)
+disp(plateau_per)
 %matrix with landscape classes
 landscapes=zeros(482,573);
 landscapes(plateau)=1;
