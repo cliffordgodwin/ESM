@@ -5,7 +5,6 @@
 
 
 import numpy as np
-get_ipython().run_line_magic('matplotlib', 'inline')
 import pandas as pd
 import matplotlib.pyplot as plt 
 
@@ -28,15 +27,15 @@ b0 = 5
 b1 = 0.25
 WQ_f = 1
 irrigation = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.6, 0.8, 0.9, 1]
-print (len(irrigation))
+
 
 
 # In[103]:
 
 
-file = r"C:\Users\fabrizia\Downloads\ESM.csv"
+file = r"ESM - Data.csv"
 data=read_file_base(file)
-display(data.head(4))
+print(data.head(4))
 
 
 # In[122]:
